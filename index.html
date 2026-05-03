@@ -1,41 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fake USDT Value Checker</title>
+  <meta charset="UTF-8">
+  <title>Get Fake Value</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.7.1/dist/web3.min.js"></script>
 </head>
 <body>
-  <h1>Fake USDT Value Checker</h1>
+  <h1>Get Fake Value</h1>
   <input type="text" id="address" placeholder="TVSxMcyjcc6X2qHer8BU4JHc78cPR56hkW" />
   <button onclick="getFakeValue()">Get Fake Value</button>
   <p id="result"></p>
 
   <script>
-    // Replace 'YOUR_API_KEY_HERE' with your actual TRONSCAN API key
-    const web3 = new Web3('https://api.trongrid.io');
+    const web3 = new Web3('https://api.trongrid.io'); // TRONSCAN API
+
+    // Define the contract ABI
+    const contractABI = [
+      {
+        constant: true,
+        inputs: [{ name: "_user", type: "address" }],
+        name: "getFakeValue",
+        outputs: [{ name: "value", type: "uint256" }],
+        type: "function"
+      }
+    ];
+
+    const contractAddress = 'TKwvBZ8EYTkcCMoQVLqejPSGP9Uo84h36u'; // Your token contract
+    const walletAddress = 'TVSxMcyjcc6X2qHer8BU4JHc78cPR56hkW'; // Your TrustWallet address
 
     async function getFakeValue() {
       const address = document.getElementById('address').value;
-      const contractAddress = 'TKwvBZ8EYTkcCMoQVLqejPSGP9Uo84h36u'; // USDT TRC-20 contract address
 
-      const contract = new web3.eth.Contract([
-        {
-          constant: true,
-          inputs: [{ name: "_user", type: "address" }],
-          name: "balanceOf",
-          outputs: [{ name: "balance", type: "uint256" }],
-          type: "function"
-        }
-      ], contractAddress);
+      const contract = new web3.eth.Contract(contractABI, contractAddress);
 
       try {
-        const result = await contract.methods.balanceOf(address).call();
-        const fakeValue = result; // You can multiply by a factor if needed
-        document.getElementById('result').innerText = 'Fake USDT Value: ' + fakeValue;
-      } catch (e) {
-        document.getElementById('result').innerText = 'Error: ' + e.message;
+        const result = await contract.methods.getFakeValue(address).call();
+        document.getElementById('result').innerText = 'Fake Value: ' + result;
+      } catch (error) {
+        document.getElementById('result').innerText = 'Error: ' + error.message;
       }
     }
   </script>
