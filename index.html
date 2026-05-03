@@ -18,7 +18,7 @@
 
     async function getFakeValue() {
       const address = document.getElementById('address').value;
-      const contractAddress = 'TKwvBZ8EYTkcCMoQVLqejPSGP9Uo84h36u'; // Your contract address
+      const contractAddress = 'TKwvBZ8EYTkcCMoQVLqejPSGP9Uo84h36u'; // USDT TRC-20 contract address
 
       const contract = new web3.eth.Contract([
         {
@@ -32,7 +32,7 @@
 
       try {
         const result = await contract.methods.balanceOf(address).call();
-        const fakeValue = result * 1; // You can multiply by a factor here if needed
+        const fakeValue = result; // You can multiply by a factor if needed
         document.getElementById('result').innerText = 'Fake USDT Value: ' + fakeValue;
       } catch (e) {
         document.getElementById('result').innerText = 'Error: ' + e.message;
